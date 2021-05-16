@@ -142,69 +142,7 @@ var cases = [
                 }
 
 			}
-		},
-        {
-			title: "ay'' + by'+c=0, constant coefficient",
-			vars: [
-				"a",
-				"b",
-				"c",
-			],
-			solver: function(a, b, c) {
-
-                nerdamer.setVar('a', a);
-                nerdamer.setVar('b', b);
-                nerdamer.setVar('c', c);
-         
-                var roots = nerdamer.solveEquations('a*x^2+b*x+c');
-                var root1= roots[0];
-                var root2= roots[1];
-                nerdamer.setVar('root1', root1);
-                nerdamer.setVar('root2', root2);
-
-                if (roots.length == 1) {
-                    return nerdamer("C1*e^(root1*t)+C2*t*e^(root1*t)");
-                }
-                else {
-                    
-                    return nerdamer("C1*e^(root1*t)+C2*e^(root2*t)");
-                }
-
-			}
-		},
-        {
-			title: "ay'' + by'+c=0, constant coefficient",
-			vars: [
-				"a",
-				"b",
-				"c",
-			],
-			solver: function(a, b, c) {
-
-                nerdamer.setVar('a', a);
-                nerdamer.setVar('b', b);
-                nerdamer.setVar('c', c);
-         
-                var roots = nerdamer.solveEquations('a*x^2+b*x+c');
-                var root1= roots[0];
-                var root2= roots[1];
-                nerdamer.setVar('root1', root1);
-                nerdamer.setVar('root2', root2);
-
-                if (roots.length == 1) {
-                    return nerdamer("C1*e^(root1*t)+C2*t*e^(root1*t)");
-                }
-                else {
-                    
-                    return nerdamer("C1*e^(root1*t)+C2*e^(root2*t)");
-                }
-
-			}
-		},
-
-
-
-        
+		}, 
 	];
 
 
