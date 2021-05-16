@@ -24,6 +24,8 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.10/dist/katex.js" integrity="sha384-oVZp5ESfNR72v/UM72YrDLnjmq+zQ9bAvyvQRnD5G/+PlxRMdmoFhhG7Tfviyo5x" crossorigin="anonymous"></script> 
 <style> input {
+
+    
     display: inline-block;
     text-align: center;
     margin: auto;
@@ -46,37 +48,48 @@
       display: block;
       margin: 0 auto;
   }
+
+  footer {
+
+    position: absolute;
+    left: 30px; 
+    right: 30px; 
+    bottom: 15px; 
+    text-align: center; 
+    font-size: small;
+  }
+
+  
+
+
   </style>
 
 
 
 </head>
 
-<h1 style="color:rgb(17, 120, 218); "> Differential Equation Solver </h1>
-<h1 style="color:rgb(231, 132, 18); font-size: medium;"> "WolframAlpha but Less Powerful" </h1>
-
+<h1 style="color:rgb(59, 98, 148); margin-bottom: -25px;"> Differential Equation Solver </h1>
+<h1 style="color:rgb(103, 191, 199); font-size: large;"> "Computational Intelligence Reimagined" </h1>
+<br />
 <select  name="form" id="form"> </select>
 <br />
 
 <div id="input"> </div>
-<button id="submit"> Submit </button>
+
+<div id="submitContainer"> </div>
+
 <br />
-<div id="answer" style="color:rgb(17, 120, 218); font-size: 20px;  padding-top: 1%; padding-bottom: 1%; font-family: Georgia, 'Times New Roman', Times, serif;" > </div>
-<footer style="position: fixed; left: 30px; right: 30px; bottom: 20px; text-align: center; font-size: small;"> Thank you Eamon "Boogie" Mikulec for countless hours and late nights spent helping me on this project! This application would not be possible without you. Thank you also to Mr. Shawn Firouzian for your support throughout this project!  </footer>
+<div id="answer" style="color:rgb(229, 94, 131); font-size: 25px;  padding-top: 1%; padding-bottom: 1%; font-family: Georgia, 'Times New Roman', Times, serif;" > </div>
+<footer> Thank you Eamon "Boogie" Mikulec for countless hours and late nights spent helping me on this project! Thank you also to Mr. Shawn Firouzian for your support throughout this project!  </footer>
+
+
 <script> 
-
-
-nerdamer.setVar('roots', 'roots(x^2+2*x+1)');
-
-console.log(nerdamer('vecget(roots,1)').toString());
-console.log(nerdamer('vecget(roots,1)').toString());
-
 
 
 var cases = [
 
         {
-            title: "Please Select",
+            title: "Please Select Equation Form",
             vars: [
 
             ],
@@ -87,7 +100,7 @@ var cases = [
         },
 
 		{
-			title: "ay'+by=c, constant or nonconstant coeff",
+			title: "ay'+by=c, constant or nonconstant coefficient",
 			vars: [
 				"a",
 				"b",
@@ -102,7 +115,7 @@ var cases = [
 			}
 		},
 		{
-			title: "ay'' + by'+c=0, constant coeff",
+			title: "ay'' + by'+c=0, constant coefficient",
 			vars: [
 				"a",
 				"b",
@@ -130,12 +143,76 @@ var cases = [
 
 			}
 		},
+        {
+			title: "ay'' + by'+c=0, constant coefficient",
+			vars: [
+				"a",
+				"b",
+				"c",
+			],
+			solver: function(a, b, c) {
+
+                nerdamer.setVar('a', a);
+                nerdamer.setVar('b', b);
+                nerdamer.setVar('c', c);
+         
+                var roots = nerdamer.solveEquations('a*x^2+b*x+c');
+                var root1= roots[0];
+                var root2= roots[1];
+                nerdamer.setVar('root1', root1);
+                nerdamer.setVar('root2', root2);
+
+                if (roots.length == 1) {
+                    return nerdamer("C1*e^(root1*t)+C2*t*e^(root1*t)");
+                }
+                else {
+                    
+                    return nerdamer("C1*e^(root1*t)+C2*e^(root2*t)");
+                }
+
+			}
+		},
+        {
+			title: "ay'' + by'+c=0, constant coefficient",
+			vars: [
+				"a",
+				"b",
+				"c",
+			],
+			solver: function(a, b, c) {
+
+                nerdamer.setVar('a', a);
+                nerdamer.setVar('b', b);
+                nerdamer.setVar('c', c);
+         
+                var roots = nerdamer.solveEquations('a*x^2+b*x+c');
+                var root1= roots[0];
+                var root2= roots[1];
+                nerdamer.setVar('root1', root1);
+                nerdamer.setVar('root2', root2);
+
+                if (roots.length == 1) {
+                    return nerdamer("C1*e^(root1*t)+C2*t*e^(root1*t)");
+                }
+                else {
+                    
+                    return nerdamer("C1*e^(root1*t)+C2*e^(root2*t)");
+                }
+
+			}
+		},
+
+
+
+        
 	];
 
 
 var selectElement = document.getElementById("form");
 var inputElement = document.getElementById("input");
-var submitElement = document.getElementById("submit");
+var submitElement = document.createElement("button");
+submitElement.innerText="Submit";
+var submitContainer = document.getElementById("submitContainer")
 
 for (let i = 0; i < cases.length; i++) {
 
@@ -149,11 +226,22 @@ for (let i = 0; i < cases.length; i++) {
 
 function onChange() {
 
+
+    if (selectElement.value!=0) {
+        console.log("hey")
+        submitContainer.appendChild(submitElement);
+    }
+    else {
+        submitContainer.remove();
+    }
+    
     answer.innerHTML = ""
     document.getElementById("answer").style.borderStyle = "none";
 
     inputElement.innerHTML = "";
     var currentCase = cases[selectElement.value];
+
+
 
     for (let i = 0; i < currentCase.vars.length; i++) {
 
@@ -161,7 +249,7 @@ function onChange() {
         var input = document.createElement("input");
         var break_ = document.createElement("br");
 
-        label.innerText=currentCase.vars[i] + ": ";
+        label.innerText=currentCase.vars[i] + "= ";
         input.id=currentCase.vars[i];
 
         inputElement.appendChild(label);
@@ -189,7 +277,7 @@ function onSubmit() {
         var latex = currentCase.solver.apply(null, varValues);
 
         
-        answer.innerHTML = "ANSWER: " + katex.renderToString(latex.latex())
+        answer.innerHTML = "Answer: " + katex.renderToString(latex.latex())
         document.getElementById("answer").style.borderStyle = "solid";
 
 
