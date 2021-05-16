@@ -41,23 +41,37 @@
     margin-left: 25%;
 
   }
+
+  select {
+      display: block;
+      margin: 0 auto;
+  }
   </style>
 
 
 
 </head>
 
-<h1 style="color:rgb(17, 120, 218);"> Differential Equation Solver </h1>
-<br />
+<h1 style="color:rgb(17, 120, 218); "> Differential Equation Solver </h1>
+<h1 style="color:rgb(231, 132, 18); font-size: medium;"> "WolframAlpha but Less Powerful" </h1>
+
 <select  name="form" id="form"> </select>
+<br />
+
 <div id="input"> </div>
-<br />
 <button id="submit"> Submit </button>
-<br />
 <br />
 <div id="answer" style="color:rgb(17, 120, 218); font-size: 20px;  padding-top: 1%; padding-bottom: 1%; font-family: Georgia, 'Times New Roman', Times, serif;" > </div>
 <footer style="position: fixed; left: 30px; right: 30px; bottom: 20px; text-align: center; font-size: small;"> Thank you Eamon "Boogie" Mikulec for countless hours and late nights spent helping me on this project! This application would not be possible without you. Thank you also to Mr. Shawn Firouzian for your support throughout this project!  </footer>
 <script> 
+
+
+nerdamer.setVar('roots', 'roots(x^2+2*x+1)');
+
+console.log(nerdamer('vecget(roots,1)').toString());
+console.log(nerdamer('vecget(roots,1)').toString());
+
+
 
 var cases = [
 
@@ -73,7 +87,7 @@ var cases = [
         },
 
 		{
-			title: "ay'+by=c",
+			title: "ay'+by=c, constant or nonconstant coeff",
 			vars: [
 				"a",
 				"b",
@@ -88,15 +102,32 @@ var cases = [
 			}
 		},
 		{
-			title: "ay'' + b ...",
+			title: "ay'' + by'+c=0, constant coeff",
 			vars: [
 				"a",
 				"b",
 				"c",
-				"d"
 			],
-			solver: function(a, b, c, d) {
-				return 
+			solver: function(a, b, c) {
+
+                nerdamer.setVar('a', a);
+                nerdamer.setVar('b', b);
+                nerdamer.setVar('c', c);
+         
+                var roots = nerdamer.solveEquations('a*x^2+b*x+c');
+                var root1= roots[0];
+                var root2= roots[1];
+                nerdamer.setVar('root1', root1);
+                nerdamer.setVar('root2', root2);
+
+                if (roots.length == 1) {
+                    return nerdamer("C1*e^(root1*t)+C2*t*e^(root1*t)");
+                }
+                else {
+                    
+                    return nerdamer("C1*e^(root1*t)+C2*e^(root2*t)");
+                }
+
 			}
 		},
 	];
