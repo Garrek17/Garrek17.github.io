@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head> 
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>DE Solver</title>
+
+ 
+   <link
+      rel="stylesheet"
+      href="myStyle.css"
+    /> 
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.10/dist/katex.min.css" integrity="sha384-0cCFrwW/0bAk1Z/6IMgIyNU3kfTcNirlObr4WjrUU7+hZeD6ravdYJ3kPWSeC31M" crossorigin="anonymous">
+
+
+    <script src="Nerdemer/nerdamer.core.js"></script> <!-- assuming you've saved the file in the root of course -->
+    <!-- LOAD MODULES -->
+    <script src="Nerdemer/Algebra.js"></script>
+    <script src="Nerdemer/Calculus.js"></script>
+    <script src="Nerdemer/Solve.js"></script>
+    <script src="Nerdemer/Extra.js"></script> <!-- again assuming you've saved the files in root -->
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.10/dist/katex.js" integrity="sha384-oVZp5ESfNR72v/UM72YrDLnjmq+zQ9bAvyvQRnD5G/+PlxRMdmoFhhG7Tfviyo5x" crossorigin="anonymous"></script> 
+<style> input {
+    display: inline-block;
+    text-align: center;
+    margin: auto;
+    width: 400px;
+    height: 20px;
+  }
+
+  body {
+      font-size: medium;
+      
+  }
+
+  label {
+    display: block;
+    margin-left: 25%;
+
+  }
+  </style>
+
+
+
+</head>
+
+<h1 style="color:rgb(17, 120, 218);"> Differential Equation Solver </h1>
+<br />
+<select  name="form" id="form"> </select>
+<div id="input"> </div>
+<br />
+<button id="submit"> Submit </button>
+<br />
+<br />
+<div id="answer" style="color:rgb(17, 120, 218); font-size: 20px;  padding-top: 1%; padding-bottom: 1%; font-family: Georgia, 'Times New Roman', Times, serif;" > </div>
+<footer style="position: fixed; left: 30px; right: 30px; bottom: 20px; text-align: center; font-size: small;"> Thank you Eamon "Boogie" Mikulec for countless hours and late nights spent helping me on this project! This application would not be possible without you. Thank you also to Mr. Shawn Firouzian for your support throughout this project!  </footer>
+<script> 
+
+var cases = [
+
+        {
+            title: "Please Select",
+            vars: [
+
+            ],
+
+            solver: function() {
+                return
+            }
+        },
+
+		{
+			title: "ay'+by=c",
+			vars: [
+				"a",
+				"b",
+				"c"
+			],
+			solver: function(a, b, c) {
+
+                nerdamer.setVar('a', a);
+                nerdamer.setVar('b', b);
+                nerdamer.setVar('c', c);
+                return nerdamer('y=(integrate(e^integrate(b/a,t)*c,t)+c1)/e^integrate(b/a,t)');
+			}
+		},
+		{
+			title: "ay'' + b ...",
+			vars: [
+				"a",
+				"b",
+				"c",
+				"d"
+			],
+			solver: function(a, b, c, d) {
+				return 
+			}
+		},
+	];
+
+
+var selectElement = document.getElementById("form");
+var inputElement = document.getElementById("input");
+var submitElement = document.getElementById("submit");
+
+for (let i = 0; i < cases.length; i++) {
+
+    var currentCase = cases[i];
+    var option = document.createElement("option")
+    option.innerText=currentCase.title;
+    option.value = i;
+    selectElement.appendChild(option);
+
+}
+
+function onChange() {
+
+    answer.innerHTML = ""
+    document.getElementById("answer").style.borderStyle = "none";
+
+    inputElement.innerHTML = "";
+    var currentCase = cases[selectElement.value];
+
+    for (let i = 0; i < currentCase.vars.length; i++) {
+
+        var label = document.createElement("label");
+        var input = document.createElement("input");
+        var break_ = document.createElement("br");
+
+        label.innerText=currentCase.vars[i] + ": ";
+        input.id=currentCase.vars[i];
+
+        inputElement.appendChild(label);
+        inputElement.appendChild(break_);
+        inputElement.appendChild(input);
+        inputElement.appendChild(break_);
+}       
+    
+}
+
+function onSubmit() {
+
+
+    var currentCase = cases[selectElement.value];
+
+    var varValues = [];
+
+    for (let i = 0; i < currentCase.vars.length; i++) {
+			var var_ = currentCase.vars[i];
+
+			var valueOfVar = document.getElementById(var_).value;
+			varValues[i] = valueOfVar;
+		}
+
+        var latex = currentCase.solver.apply(null, varValues);
+
+        
+        answer.innerHTML = "ANSWER: " + katex.renderToString(latex.latex())
+        document.getElementById("answer").style.borderStyle = "solid";
+
+
+
+
+}
+
+selectElement.addEventListener("change", onChange);
+submitElement.addEventListener("click", onSubmit);
+
+</script>
+
+</html>
